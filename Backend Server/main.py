@@ -9,6 +9,11 @@ import serial
 
 app = FastAPI()
 
+@app.get("/getCurrent")
+async def get_events():
+    print('Get Charging Current Sent Successfully')
+    return {"message": "3.27 A"}
+
 @app.post("/data")
 async def process_data():
     client = ModbusClient(method='rtu', port='/dev/ttyUSB0', baudrate=9600, timeout=1)
@@ -26,7 +31,7 @@ async def process_data():
     load_current = client.read_holding_registers(LOAD_CURRENT_REGISTER, 1).registers[0]
     grid_current = client.read_holding_registers(GRID_CURRENT_REGISTER, 1).registers[0]
 
-    print(f"Solar Panel Current: {solar_panel_current}")
+    print(f"Solar Panel Current: {solar_panel_current}") #Solar Panel Current: 7.2
     print(f"Load Current: {load_current}")
     print(f"Grid Current: {grid_current}")
     data = {
